@@ -11,10 +11,12 @@ This HTML page provides a visualization of IP address allocation within a Virtua
 *   **Interactive Tooltips**: Hovering over any segment in the visualization bar displays detailed information about that block, such as its name, CIDR, IP address range, and size.
 *   **Zoom and Pan**: The visualization bar supports zooming in and out (using the mouse wheel) and panning (by clicking and dragging) to inspect specific areas of the VNet, especially useful for large VNets or very small subnets.
 *   **Legend**: A legend is provided to map subnet names and "Unallocated" space to their respective colors in the visualization.
-*   **Subnet Details Table**: Lists all configured subnets with their names, CIDR notation, IP address range, total number of IPs, and the percentage of the VNet they occupy.
+*   **Subnet Details Table**: Lists all configured subnets with their names, CIDR notation, IP address range, total number of IPs, and the percentage of the VNet they occupy. Also allows for direct management of subnets.
 *   **Dynamic Configuration Management**:
     *   **VNet CIDR Update**: Modify the VNet CIDR directly through the UI.
-    *   **Subnet Management**: Add, update (name and CIDR), and delete subnets via an intuitive UI.
+    *   **Subnet Management (in-table)**:
+        *   **Add a new subnet**: Click the "+ Add Subnet" button at the bottom of the "Subnet Details" table. This will reveal input fields to enter the new subnet's name and CIDR, then save or cancel.
+        *   **Delete a subnet**: Click the trash can icon (🗑️) in the "Actions" column for the respective subnet in the "Subnet Details" table. A confirmation will be asked.
     *   **Local Storage Persistence**: Your VNet and subnet configurations are automatically saved in the browser's local storage, so your settings persist across sessions.
     *   **Reset to Defaults**: A "Reset to Defaults" button allows you to easily revert to the initial sample configuration.
 *   **Error Handling**: The tool will display error messages for common configuration issues, such as subnets defined outside the VNet's range or overlapping subnets.
@@ -29,10 +31,15 @@ This HTML page provides a visualization of IP address allocation within a Virtua
     *   Enter the new VNet CIDR in the input field.
     *   Click the "Update VNet" button.
 4.  **To manage subnets**:
-    *   Go to the "Manage Subnets" section.
-    *   **Add a new subnet**: Enter the name and CIDR in the respective input fields at the bottom of this section and click "Add Subnet".
-    *   **Update an existing subnet**: Modify its name or CIDR in the input fields next to the subnet entry and click its "Update" button.
-    *   **Delete a subnet**: Click the "Delete" button next to the subnet entry you wish to remove (a confirmation will be asked).
+    *   Navigate to the "Subnet Details" table.
+    *   **Add a new subnet**:
+        *   Click the "+ Add Subnet" button located at the bottom of the table.
+        *   The button row will transform into input fields for "Subnet Name" and "Subnet CIDR".
+        *   Enter the required details and click "Save". To discard, click "Cancel".
+    *   **Delete a subnet**:
+        *   Locate the subnet you wish to remove in the table.
+        *   Click the trash can icon (🗑️) in the "Actions" column for that subnet.
+        *   Confirm the deletion when prompted.
 5.  Changes to the VNet or subnets are automatically saved to your browser's local storage and the visualization updates instantly.
 6.  To revert to the original default configuration provided in the script, click the "Reset to Defaults" button in the "Configuration" section.
 7.  Use the mouse wheel to zoom and click-and-drag to pan the visualization bar for a closer look.
