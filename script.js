@@ -39,6 +39,36 @@ function saveConfig() {
     localStorage.setItem('vnetConfig', JSON.stringify(config));
 }
 
+// Function to export configuration to base64
+function exportConfig() {
+    const configString = JSON.stringify(config);
+    const base64Config = btoa(configString);
+    prompt("Copy this to your clipboard:", base64Config);
+}
+
+// Function to import configuration from base64
+function importConfig() {
+    const base64Config = prompt("Paste your configuration here:");
+    if (base64Config) {
+        try {
+            const configString = atob(base64Config);
+            const importedConfig = JSON.parse(configString);
+            // Basic validation of imported config structure (can be more thorough)
+            if (importedConfig && importedConfig.vnetCidr && Array.isArray(importedConfig.subnets)) {
+                config = importedConfig;
+                saveConfig();
+                updateVisualization();
+                alert("Configuration imported successfully!");
+            } else {
+                alert("Error: Invalid configuration format.");
+            }
+        } catch (e) {
+            console.error("Error importing configuration:", e);
+            alert("Error importing configuration: Invalid base64 string or JSON format.");
+        }
+    }
+}
+
 // Function to update the visualization
 function updateVisualization() {
     // Clear any existing content
@@ -473,6 +503,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateVisualization();
         }
     });
+
+    document.getElementById('exportConfigButton').addEventListener('click', exportConfig);
+    document.getElementById('importConfigButton').addEventListener('click', importConfig);
 
     let currentZoom = 1.0;
     let currentPanX = 0;

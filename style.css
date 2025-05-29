@@ -166,7 +166,8 @@ tr:nth-child(even) {
 }
 
 .config-label {
-    /* Styles for labels if needed, or rely on default */
+    margin-right: 5px; /* Added some margin */
+    font-weight: bold; /* Made label bold */
 }
 
 .config-input {
@@ -178,17 +179,43 @@ tr:nth-child(even) {
 
 .config-button {
     margin-left: 10px;
-    padding: 5px 10px;
+    padding: 8px 15px; /* Updated padding */
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px; /* Updated border-radius */
     cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* Added opacity transition */
+}
+
+.config-button:hover {
+    opacity: 0.85; /* General hover effect */
 }
 
 .config-button-update {
     background-color: #3498db; /* Blue */
 }
+.config-button-update:hover {
+    background-color: #2980b9; /* Darker Blue */
+}
 
 .config-button-reset {
     background-color: #e74c3c; /* Red */
+}
+.config-button-reset:hover {
+    background-color: #c0392b; /* Darker Red */
+}
+
+.config-button-export {
+    background-color: #2ecc71; /* Green */
+}
+.config-button-export:hover {
+    background-color: #27ae60; /* Darker Green */
+}
+
+.config-button-import {
+    background-color: #f39c12; /* Orange */
+}
+.config-button-import:hover {
+    background-color: #e67e22; /* Darker Orange */
 }
