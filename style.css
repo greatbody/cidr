@@ -1,0 +1,194 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+}
+
+h1,
+h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.vnet-info,
+.subnet-details-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.vnet-info p,
+.subnet-details-header p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+.vnet-info strong,
+.subnet-details-header strong {
+    color: #3498db;
+}
+
+.visualization-area {
+    width: 100%;
+    height: 60px;
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 20px;
+    overflow: hidden;
+    cursor: grab;
+}
+
+.visualization-area.dragging {
+    cursor: grabbing;
+}
+
+#ipBlocksWrapper {
+    display: flex;
+    height: 100%;
+    min-width: 100%;
+    transform-origin: 0 0;
+    /* IMPORTANT: Scale from the left edge */
+    /* transition: transform 0.05s linear; /* Optional: for slightly smoother zoom, but can feel laggy */
+}
+
+.ip-block {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    /* transition: opacity 0.2s ease-in-out; /* Opacity transition is fine */
+    flex-shrink: 0;
+}
+
+.ip-block:last-child {
+    border-right: none;
+}
+
+.ip-block:hover {
+    opacity: 0.85;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 100;
+    white-space: nowrap;
+    transform: translate(-50%, -110%);
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 10px;
+    font-size: 0.9em;
+}
+
+.legend-color-box {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.95em;
+}
+
+th {
+    background-color: #3498db;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Styles for configuration section */
+.config-section-controls {
+    margin-bottom: 10px;
+}
+
+.config-label {
+    /* Styles for labels if needed, or rely on default */
+}
+
+.config-input {
+    margin-left: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.config-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.config-button-update {
+    background-color: #3498db; /* Blue */
+}
+
+.config-button-reset {
+    background-color: #e74c3c; /* Red */
+}
