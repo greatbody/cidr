@@ -74,23 +74,30 @@ function updateVisualization() {
             try {
                 if (!isValidCidr(subnetData.cidr)) {
                     errorMessages.push(`Error: Subnet ${subnetData.name} has invalid CIDR format: ${subnetData.cidr}.`);
-                    return null;
+                    return null; // Keep filtering for malformed CIDR
                 }
                 const range = cidrToRange(subnetData.cidr);
-                if (range.startIpLong < vnet.startIpLong || range.endIpLong > vnet.endIpLong) {
-                    errorMessages.push(`Error: Subnet ${subnetData.name} (${subnetData.cidr}) is outside the VNet range.`);
-                    return null;
+                
+                let isOutOfBounds = false;
+                // Only check bounds if vnet itself is valid and has been calculated
+                if (vnet && (range.startIpLong < vnet.startIpLong || range.endIpLong > vnet.endIpLong)) {
+                    // The main error message for this is already added to `errorMessages`
+                    // by the loop that checks subnets against the VNet range earlier in `updateVisualization`,
+                    // so no need to add it here again.
+                    isOutOfBounds = true;
                 }
-                return {
+
+                return { // Return the object, even if outOfBounds, but pass through nulls for critical errors
                     ...subnetData,
                     ...range,
-                    color: SUBNET_COLORS[index % SUBNET_COLORS.length]
+                    color: SUBNET_COLORS[index % SUBNET_COLORS.length],
+                    isOutOfBounds: isOutOfBounds 
                 };
             } catch (e) {
                 errorMessages.push(`Error processing subnet ${subnetData.name} (${subnetData.cidr}): ${e.message}`);
-                return null;
+                return null; // Keep filtering for processing errors
             }
-        }).filter(s => s !== null);
+        }).filter(s => s !== null); // Still filter out critical errors (nulls from invalid CIDR format or catch blocks)
 
         processedSubnets.sort((a, b) => a.startIpLong - b.startIpLong);
 
@@ -193,9 +200,30 @@ function renderSubnetTable(processedSubnets, vnet, errorMessages) {
         const row = subnetTableBody.insertRow();
         row.insertCell().textContent = subnet.name;
         row.insertCell().textContent = subnet.cidr;
-        row.insertCell().textContent = vnet ? `${subnet.networkAddress} - ${subnet.broadcastAddress}` : '-';
-        row.insertCell().textContent = vnet ? subnet.numAddresses.toLocaleString() : '-';
-        row.insertCell().textContent = vnet ? `${((subnet.numAddresses / vnet.numAddresses) * 100).toFixed(2)}%` : '-';
+
+        const ipRangeCell = row.insertCell();
+        const totalIpsCell = row.insertCell();
+        const percentVnetCell = row.insertCell();
+
+        if (!vnet) { // VNet itself is invalid (e.g., bad VNet CIDR from user input)
+            ipRangeCell.textContent = '-';
+            // Subnet's own IP count can still be shown if subnet object is valid
+            totalIpsCell.textContent = subnet.numAddresses ? subnet.numAddresses.toLocaleString() : '-'; 
+            percentVnetCell.textContent = '-';
+        } else if (subnet.isOutOfBounds) {
+            ipRangeCell.textContent = 'Error: Outside VNet';
+            ipRangeCell.style.color = 'red';
+            // For an out-of-bounds subnet, its own number of IPs is still valid.
+            totalIpsCell.textContent = subnet.numAddresses ? subnet.numAddresses.toLocaleString() : '-';
+            percentVnetCell.textContent = 'N/A'; // % of VNet is not applicable
+        } else {
+            // Subnet is valid and within the (valid) VNet
+            ipRangeCell.textContent = `${subnet.networkAddress} - ${subnet.broadcastAddress}`;
+            totalIpsCell.textContent = subnet.numAddresses ? subnet.numAddresses.toLocaleString() : '-';
+            // Ensure vnet.numAddresses is valid and > 0 to prevent NaN or Infinity
+            percentVnetCell.textContent = (vnet.numAddresses && vnet.numAddresses > 0) ? 
+                `${((subnet.numAddresses / vnet.numAddresses) * 100).toFixed(2)}%` : '-';
+        }
 
         const actionsCell = row.insertCell();
         const deleteButton = document.createElement('button');
