@@ -381,7 +381,14 @@ function cidrToRange(cidr) {
         throw new Error(`Invalid CIDR prefix: ${cidr}`);
     }
     const ipLong = ipToLong(ip);
-    const mask = (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF;
+    let mask;
+    if (prefix === 0) {
+        mask = 0; // Correct mask for /0 is all zeros
+    } else {
+        // This correctly handles prefix 1-31, and also prefix 32
+        // For prefix = 32, (32-32)=0, (X << 0) = X, so mask = 0xFFFFFFFF (correct)
+        mask = (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF;
+    }
     const networkAddressLong = ipLong & mask;
     const broadcastAddressLong = networkAddressLong | (~mask & 0xFFFFFFFF);
     const numAddresses = Math.pow(2, 32 - prefix);
