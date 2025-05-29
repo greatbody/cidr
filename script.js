@@ -536,3 +536,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial call
     updateVisualization();
 });
+
+// Export functions for testing if not in a browser environment
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        isValidCidr,
+        ipToLong,
+        longToIp,
+        cidrToRange
+        // Add other functions you want to test here
+    };
+}
